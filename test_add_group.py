@@ -1,122 +1,44 @@
-{
-  "type": "script",
-  "seleniumVersion": "2",
-  "formatVersion": 2,
-  "steps": [
-    {
-      "type": "get",
-      "url": "http://localhost/addressbook/"
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "user"
-      },
-      "text": "admin"
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "pass"
-      },
-      "text": "secret"
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "xpath",
-        "value": "//form[@id='LoginForm']/input[3]"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "link text",
-        "value": "groups"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "name",
-        "value": "new"
-      }
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "group_name"
-      },
-      "text": "groupname"
-    },
-    {
-      "type": "setElementSelected",
-      "locator": {
-        "type": "xpath",
-        "value": "//div[@id='content']//select[normalize-space(.)='[none]']//option[1]"
-      }
-    },
-    {
-      "type": "sendKeysToElement",
-      "locator": {
-        "type": "name",
-        "value": "group_header"
-      },
-      "text": "\\9"
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "group_header"
-      },
-      "text": "grouphaeder"
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "group_header"
-      },
-      "text": "groupheader"
-    },
-    {
-      "type": "setElementText",
-      "locator": {
-        "type": "name",
-        "value": "group_footer"
-      },
-      "text": "groupfooter"
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "name",
-        "value": "submit"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "link text",
-        "value": "group page"
-      }
-    },
-    {
-      "type": "clickElement",
-      "locator": {
-        "type": "link text",
-        "value": "Logout"
-      }
-    }
-  ],
-  "data": {
-    "configs": {},
-    "source": "none"
-  },
-  "inputs": [],
-  "timeoutSeconds": 60
-}
+# -*- coding: utf-8 -*-
+from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium.webdriver.common.action_chains import ActionChains
+import time
+
+success = True
+wd = WebDriver()
+wd.implicitly_wait(60)
+
+def is_alert_present(wd):
+    try:
+        wd.switch_to_alert().text
+        return True
+    except:
+        return False
+
+try:
+    wd.get("http://localhost/addressbook/")
+    wd.find_element_by_name("user").click()
+    wd.find_element_by_name("user").clear()
+    wd.find_element_by_name("user").send_keys("admin")
+    wd.find_element_by_name("pass").click()
+    wd.find_element_by_name("pass").clear()
+    wd.find_element_by_name("pass").send_keys("secret")
+    wd.find_element_by_xpath("//form[@id='LoginForm']/input[3]").click()
+    wd.find_element_by_name("searchform").click()
+    wd.find_element_by_link_text("groups").click()
+    wd.find_element_by_name("new").click()
+    wd.find_element_by_name("group_name").click()
+    wd.find_element_by_name("group_name").clear()
+    wd.find_element_by_name("group_name").send_keys("groupname2")
+    wd.find_element_by_name("group_header").click()
+    wd.find_element_by_name("group_header").clear()
+    wd.find_element_by_name("group_header").send_keys("groupgeader")
+    wd.find_element_by_name("group_footer").click()
+    wd.find_element_by_name("group_footer").clear()
+    wd.find_element_by_name("group_footer").send_keys("groufooter")
+    wd.find_element_by_name("submit").click()
+    wd.find_element_by_link_text("group page").click()
+    wd.find_element_by_link_text("Logout").click()
+finally:
+    wd.quit()
+    if not success:
+        raise Exception("Test failed.")
