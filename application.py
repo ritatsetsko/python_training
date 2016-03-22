@@ -6,15 +6,24 @@ class Application:
         self.wd = WebDriver()
         self.wd.implicitly_wait(60)
 
-    def logout(self):
+    def login(self, username, password):
         wd = self.wd
-        wd.find_element_by_link_text("Logout").click()
+        wd.get("http://localhost/addressbook/")
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").clear()
+        wd.find_element_by_name("user").send_keys(username)
+        wd.find_element_by_name("pass").click()
+        wd.find_element_by_name("pass").clear()
+        wd.find_element_by_name("pass").send_keys(password)
+        wd.find_element_by_xpath("//form[@id='LoginForm']/input[3]").click()
 
+    def open_groups_name(self):
+        wd = self.wd
+        wd.find_element_by_link_text("groups").click()
 
     def create_group(self, group):
         wd = self.wd
-        # open groups name
-        wd.find_element_by_link_text("groups").click()
+        self.open_groups_name()
         # init group creation
         wd.find_element_by_name("new").click()
         # fill group form
@@ -29,21 +38,18 @@ class Application:
         wd.find_element_by_name("group_footer").send_keys(group.footer)
         # submit group creation
         wd.find_element_by_name("submit").click()
+        self.return_to_groups_page()
+
+
+    def return_to_groups_page(self):
+        wd = self.wd
         # return to groups page
         wd.find_element_by_link_text("group page").click()
 
 
-    def login(self, username, password):
+    def logout(self):
         wd = self.wd
-        wd.get("http://localhost/addressbook/")
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys(username)
-        wd.find_element_by_name("pass").click()
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys(password)
-        wd.find_element_by_xpath("//form[@id='LoginForm']/input[3]").click()
-
+        wd.find_element_by_link_text("Logout").click()
 
     def destroy(self):
         self.wd.quit()
