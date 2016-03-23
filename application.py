@@ -1,24 +1,20 @@
 from selenium.webdriver.firefox.webdriver import WebDriver
-from fixture.session import SessionHelper
+
 class Application:
 
     def __init__(self):
         self.wd = WebDriver()
         self.wd.implicitly_wait(60)
-        self.session = SessionHelper(self)
 
-
-    def open_home_page(self):
+    def logout(self):
         wd = self.wd
-        wd.get("http://localhost/addressbook/")
+        wd.find_element_by_link_text("Logout").click()
 
-    def open_groups_name(self):
-        wd = self.wd
-        wd.find_element_by_link_text("groups").click()
 
     def create_group(self, group):
         wd = self.wd
-        self.open_groups_name()
+        # open groups name
+        wd.find_element_by_link_text("groups").click()
         # init group creation
         wd.find_element_by_name("new").click()
         # fill group form
@@ -33,14 +29,42 @@ class Application:
         wd.find_element_by_name("group_footer").send_keys(group.footer)
         # submit group creation
         wd.find_element_by_name("submit").click()
-        self.return_to_groups_page()
-
-
-    def return_to_groups_page(self):
-        wd = self.wd
         # return to groups page
         wd.find_element_by_link_text("group page").click()
 
+    def create_contact(self, contact):
+        wd = self.wd
+        # init contact creation
+        wd.find_element_by_link_text("add new").click()
+        # fill group form
+        wd.find_element_by_name("firstname").click()
+        wd.find_element_by_name("firstname").clear()
+        wd.find_element_by_name("firstname").send_keys(contact.firstname)
+        wd.find_element_by_name("lastname").click()
+        wd.find_element_by_name("lastname").clear()
+        wd.find_element_by_name("lastname").send_keys(contact.lastname)
+        wd.find_element_by_name("mobile").click()
+        wd.find_element_by_name("mobile").clear()
+        wd.find_element_by_name("mobile").send_keys(contact.mobile)
+        wd.find_element_by_name("email").click()
+        wd.find_element_by_name("email").clear()
+        wd.find_element_by_name("email").send_keys(contact.email)
+        # submit contact creation
+        wd.find_element_by_name("theform").click()
+        # return to home page
+        wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+
+
+    def login(self, username, password):
+        wd = self.wd
+        wd.get("http://localhost/addressbook/")
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").clear()
+        wd.find_element_by_name("user").send_keys(username)
+        wd.find_element_by_name("pass").click()
+        wd.find_element_by_name("pass").clear()
+        wd.find_element_by_name("pass").send_keys(password)
+        wd.find_element_by_xpath("//form[@id='LoginForm']/input[3]").click()
 
 
     def destroy(self):
