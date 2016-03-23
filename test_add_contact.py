@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from selenium.webdriver.firefox.webdriver import WebDriver
-import unittest
+import time, unittest
 from contact import Contact
 
 def is_alert_present(wd):
