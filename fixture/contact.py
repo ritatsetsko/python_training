@@ -1,10 +1,19 @@
+from model.contact import Contact
+
 class ContactHelper:
 
     def __init__(self, app):
         self.app = app
 
+    def open_contacts_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("add"))>0):
+            wd.find_element_by_link_text("home").click()
+
+
     def create_contact(self, contact):
         wd = self.app.wd
+        #self.open_contacts_page()
         # init contact creation
         wd.find_element_by_link_text("add new").click()
         # fill group form
@@ -27,6 +36,7 @@ class ContactHelper:
 
     def delete_first_contact(self):
         wd = self.app.wd
+        self.open_contacts_page()
         #select first contact
         wd.find_element_by_name("selected[]").click()
         #submit deletion
@@ -36,6 +46,7 @@ class ContactHelper:
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
+        self.open_contacts_page()
         #select first contact
         wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
         # edit contact fields
@@ -58,4 +69,16 @@ class ContactHelper:
 
     def count(self):
         wd = self.app.wd
+        self.open_contacts_page()
         return len(wd.find_elements_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_contacts_page()
+        contacts=[]
+        for element in wd.find_elements_by_name("entry"):
+            id = element.find_element_by_xpath('./td/input').get_attribute("value")
+            lastn = element.find_element_by_xpath('./td[2]').text
+            firstn = element.find_element_by_xpath('./td[3]').text
+            contacts.append(Contact(firstname=firstn, lastname=lastn, id=id))
+        return contacts
