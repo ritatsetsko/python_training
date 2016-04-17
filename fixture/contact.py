@@ -13,7 +13,7 @@ class ContactHelper:
 
     def create_contact(self, contact):
         wd = self.app.wd
-        #self.open_contacts_page()
+        self.open_contacts_page()
         # init contact creation
         wd.find_element_by_link_text("add new").click()
         # fill group form
